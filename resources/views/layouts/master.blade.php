@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{{ asset('') }}vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('') }}vendor/themify-icons/themify-icons.css">
     <link rel="stylesheet" href="{{ asset('') }}vendor/perfect-scrollbar/css/perfect-scrollbar.css">
+    <link href="{{ asset('')}}vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="{{ asset('')}}vendor/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css" rel="stylesheet" />
 
     <!-- CSS for this page only -->
     @stack('cssLibrary')
@@ -40,9 +42,13 @@
         <div class="overlay action-toggle">
         </div>
     </div>
+    <script src="{{ asset('')}}vendor/jquery/jquery.min.js"></script>
     <script src="{{ asset('')}}vendor/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="{{ asset('')}}vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
+    <script src="{{ asset('')}}vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('')}}vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="{{ asset('')}}vendor/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('')}}vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
     <!-- js for this page only -->
     @stack('jsLibrary')
     <!-- ======= -->
