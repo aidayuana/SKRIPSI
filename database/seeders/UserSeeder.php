@@ -28,6 +28,7 @@ class UserSeeder extends Seeder
             // Add other necessary fields as per your Class model
         ]);
 
+        
         $users = ['siswa', 'guru', 'admin sekolah', 'super admin'];
         $default = [
             'password' => bcrypt('password'),

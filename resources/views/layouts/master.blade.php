@@ -42,6 +42,7 @@
         <div class="overlay action-toggle">
         </div>
     </div>
+
     <script src="{{ asset('')}}vendor/jquery/jquery.min.js"></script>
     <script src="{{ asset('')}}vendor/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="{{ asset('')}}vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>

@@ -13,7 +13,9 @@ class MenuController extends Controller
      * Display a listing of the resource.
      */
     public function index(MenuDataTable $menuDataTable)
-    {
+    {   
+        // $this->authorize('read menu');
+        $this->authorize('read konfigurasi/menu');
         return $menuDataTable->render('pages.konfigurasi.menu');
     }
 

@@ -10,6 +10,11 @@
                     <h4>Menu</h4>
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <button class="btn btn-primary mb-3">Tambah</button>
+                        </div>
+                    </div>
                     {!! $dataTable->table() !!}
                 </div>
             </div>
