@@ -31,7 +31,8 @@
     <div id="app">
         <div class="shadow-header"></div>
         @include('layouts.header')
-        @include('layouts.sidebar')      
+        @include('layouts.sidebar')  
+        <div class="modal fade" id="modal_action" tabindex="-1" aria-labelledby="largeModalLabel" aria-hidden="true"></div>    
         {{ $slot }}
 
         @include('layouts.settings')
