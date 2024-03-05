@@ -6,6 +6,7 @@ use App\DataTables\Konfigurasi\MenuDataTable;
 use App\Models\Konfigurasi\Menu;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Konfigurasi\MenuRequest;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
@@ -25,6 +26,7 @@ class MenuController extends Controller
      */
     public function create(Menu $menu)
     {
+        $this->authorize('create konfigurasi/menu');
         $mainMenus = Menu::whereNull('main_menu_id')->select('id', 'name')->get();
         return view('pages.konfigurasi.menu-form', [
             'action' => route('konfigurasi.menu.store'),
@@ -38,6 +40,8 @@ class MenuController extends Controller
      */
     public function store(MenuRequest $request, Menu $menu)
     {
+        $this->authorize('create konfigurasi/menu');
+        
         $menu->fill($request->validated());
         $menu->fill([
             'orders' => $request->orders,
@@ -47,6 +51,10 @@ class MenuController extends Controller
         ]);
 
         $menu->save();
+
+        foreach($request->permission as $permission){
+            Permission::create(['name' => $permission. "{$menu->url}"])->menus()->attach($menu);
+        }
 
         return response()->json([
             'status' => 'success',

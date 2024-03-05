@@ -65,8 +65,19 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-12">
+                        <div class="mb-3">
+                            <label for="" class="form-label d-block mb-2">Permission</label>
+                            @foreach (['create', 'read', 'update', 'delete'] as $item)
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" name="permission[]" type="checkbox" id="inlineCheckbox1{{ $item }}"
+                                        value="{{ $item }}">
+                                    <label class="form-check-label" for="inlineCheckbox1{{ $item }}">{{ $item }}</label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
-                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
