@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
         ]);
 
         
-        $users = ['siswa', 'guru', 'admin sekolah', 'super admin'];
+        $users = ['siswa', 'guru', 'adminsekolah', 'superadmin'];
         $default = [
             'password' => bcrypt('password'),
             'email_verified_at' => now(),

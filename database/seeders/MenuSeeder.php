@@ -19,10 +19,10 @@ class MenuSeeder extends Seeder
         */
         $mm = Menu::firstOrcreate(['url' => 'konfigurasi'],['name' => 'konfigurasi', 'category' => 'MASTER DATA', 'icon' => 'setting']);
 
-        $this->attachMenupermission($mm, ['read'], ['admin sekolah']);
+        $this->attachMenupermission($mm, ['read'], ['adminsekolah']);
 
         $sm = $mm->subMenus()->create(['name' => 'Menu', 'url' => $mm->url.'/menu', 'category' => $mm->category]);
 
-        $this->attachMenupermission($sm, ['read', 'create', 'update', 'delete'], ['admin sekolah']);
+        $this->attachMenupermission($sm, ['read', 'create', 'update', 'delete'], ['adminsekolah']);
     }
 }

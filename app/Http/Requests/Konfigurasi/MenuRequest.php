@@ -24,7 +24,7 @@ class MenuRequest extends FormRequest
         return [
             'name' => 'required',
             'url' => 'required',
-            'orders' => 'required',
+            'orders' => 'required|integer',
         ];
     }
 }

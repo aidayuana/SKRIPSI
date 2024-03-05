@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="{{ asset('')}}assets/css/style.min.css">
     <link rel="stylesheet" href="{{ asset('')}}assets/css/bootstrap-override.min.css">
     <link rel="stylesheet" id="theme-color" href="{{ asset('')}}assets/css/dark.min.css">
+    <link rel="stylesheet" href="{{ asset('')}}assets/css/loading.css">
     @stack('css')
 </head>
 
@@ -42,6 +43,9 @@
         </footer>
         <div class="overlay action-toggle">
         </div>
+        <div class="preloader" style="visibility:hidden;">
+            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+        </div>
     </div>
 
     <script src="{{ asset('')}}vendor/jquery/jquery.min.js"></script>
@@ -57,6 +61,45 @@
     <script src="{{ asset('')}}assets/js/main.min.js"></script>
     <script>
         Main.init()
+
+        showLoading()
+        $(document).ready(function() {
+            showLoading(false)
+        })
+        function showLoading(show = true) {
+            const preloader = $(".preloader");
+
+            if (show) {
+                preloader.css({
+                    opacity: 1,
+                    visibility: "visible",
+                });
+            } else {
+                preloader.css({
+                    opacity: 0,
+                    visibility: "hidden",
+                });
+            }
+        }
+
+        function submitLoader(formId = '#form_action') {
+            const button = $(formId).find('button[type="submit"]');
+
+            function show(){
+                button.addClass("btn-load")
+                    .attr("disabled", true)
+                    .html(
+                        `<span class="d-flex align-items-center"><span class="spinner-border flex-shrink-0"></span><span class="flex-grow-1 ms-2"> Loading...</span></span>`
+                    );
+            }
+            function hide(text = "Save"){
+                button.removeClass("btn-load").removeAttr("disabled").text(text);
+            }
+            return {
+                show,
+                hide,
+            };
+        }
     </script>
     @stack('js')
 </body>

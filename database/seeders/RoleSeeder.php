@@ -15,21 +15,26 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         // Pertama, buat permissions
-        Permission::create(['name' => 'read konfigurasi/menu']);
+        $readPermission = Permission::create(['name' => 'read konfigurasi/menu']);
+        $createPermission = Permission::create(['name' => 'create konfigurasi/menu']);
         
         // Kemudian, buat roles
         $siswa = Role::create(['name' => 'siswa']);
         $guru = Role::create(['name' => 'guru']);
-        $adminSekolah = Role::create(['name' => 'admin sekolah']);
-        $superAdmin = Role::create(['name' => 'super admin']);
+        $adminSekolah = Role::create(['name' => 'adminsekolah']);
+        $superAdmin = Role::create(['name' => 'superadmin']);
 
         // Lalu, berikan permission ke role tertentu
-        $adminSekolah->givePermissionTo('read konfigurasi/menu');
-        $superAdmin->givePermissionTo('read konfigurasi/menu');
+        $adminSekolah->givePermissionTo($readPermission);
+        $adminSekolah->givePermissionTo($createPermission);
+        $superAdmin->givePermissionTo($readPermission);
+        $superAdmin->givePermissionTo($createPermission);
+
 
         // Jika ingin memberikan permission yang sama ke semua role, gunakan looping
         foreach (Role::all() as $role) {
-            $role->givePermissionTo('read konfigurasi/menu');
+            $role->givePermissionTo($readPermission);
+            $role->givePermissionTo($createPermission);
         }
     }
 }
