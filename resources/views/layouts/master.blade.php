@@ -100,6 +100,80 @@
                 hide,
             };
         }
+         // This function initializes form submission logic
+         function handleFormSubmit(selector) {
+                $(selector).on('submit', function(e) {
+                    e.preventDefault();
+                    const _form = this;
+                    $.ajax({
+                        url: this.action,
+                        method: this.method,
+                        data: new FormData(_form),
+                        contentType: false,
+                        processData: false,
+                        beforeSend: function() {
+                            $(_form).find('.is-invalid').removeClass('is-invalid');
+                            $(_form).find('.invalid-feedback').remove();
+                            submitLoader().show(); // Ensure this is defined
+                        },
+                        success: function(res) {
+                            $('#modal_action').modal('hide');
+                            window.LaravelDataTables['menu-table'].ajax.reload();
+                        },
+                        complete: function() {
+                            submitLoader().hide(); // Ensure this is defined
+                        },
+                        error: function(err) {
+                            const errors = err.responseJSON?.errors;
+                            if (errors) {
+                                for (let [key, message] of Object.entries(errors)) {
+                                    const inputField = $(`[name="${key}"]`);
+                                    inputField.addClass('is-invalid');
+                                    inputField.next('.invalid-feedback').remove(); // Remove any existing feedback
+                                    inputField.after(`<div class="invalid-feedback">${message}</div>`);
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+
+            // This function handles AJAX calls for the "Tambah" button
+            function handleAjax(url, method = 'get') {
+                let onSuccessCallback;
+
+                function execute() {
+                    $.ajax({
+                        url,
+                        method,
+                        beforeSend: function() {
+                            showLoading(true); // Ensure this is defined
+                        },
+                        complete: function() {
+                            showLoading(false); // Ensure this is defined
+                        },
+                        success: function(res) {
+                            const modal = $('#modal_action');
+                            modal.html(res);
+                            modal.modal('show');
+
+                            onSuccessCallback && onSuccessCallback(res);
+                        },
+                        error: function(err) {
+                            console.error(err);
+                        }
+                    });
+                }
+
+                function onSuccess(cb) {
+                    onSuccessCallback = cb;
+                }
+
+                return {
+                    execute: execute,
+                    onSuccess: onSuccess
+                };
+            }
     </script>
     @stack('js')
 </body>
