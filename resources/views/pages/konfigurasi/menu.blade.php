@@ -1,5 +1,4 @@
 <x-master-layout>
-   
     <div class="main-content">
         <div class="title">
             Konfigurasi
@@ -17,35 +16,82 @@
                             @endcan
                         </div>
                     </div>
-                    {!! $dataTable->table() !!}
+                    {!! $dataTable->table(['id'=>'menu-table']) !!}
                 </div>
             </div>
         </div>
-       
+    </div>
+     <!-- Modal Structure -->
+     <div class="modal fade" id="modalContainer" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Kode form Anda di sini -->
+            </div>
+        </div>
     </div>
     @push('js')
-        {!! $dataTable->scripts() !!}
+    {!! $dataTable->scripts() !!}
 
-        <script>
+    <script>
+        $(document).ready(function() {
+            function showModal(url) {
+                // Request AJAX untuk mengambil form
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                        // Tampilkan form di dalam modal
+                        $('#modalContainer .modal-content').html(response);
+                        $('#modalContainer').modal('show');
 
-            $(document).on('click', '.add', function(e) {
-                e.preventDefault();
+                        // Setelah form ditampilkan, inisialisasi event handler untuk form submission
+                        initFormSubmitHandler();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat memuat form.');
+                    }
+                });
+            }
 
-                const ajaxHandler = handleAjax(this.href, 'get');
-                ajaxHandler.onSuccess(function() {
-                    $('[name="level_menu"]').on('change', function() {
-                        if (this.value == 'sub_menu') {
-                            $('#main_menu_wrapper').removeClass('d-none');
-                        } else {
-                            $('#main_menu_wrapper').addClass('d-none');
+            function initFormSubmitHandler() {
+                // Ini mungkin perlu diubah sesuai dengan ID form Anda yang sebenarnya
+                $('#form_action').submit(function(e) {
+                    e.preventDefault();
+                    var formData = $(this).serialize(); // Pastikan form memiliki ID yang sesuai
+
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: 'POST',
+                        data: formData,
+                        success: function(response) {
+                            // Pastikan server mengembalikan JSON dengan format { status: "success" }
+                            if(response.status === 'success') {
+                                $('#modalContainer').modal('hide');
+                                // Opsi untuk reload atau update UI
+                            } else {
+                                // Handle jika response bukan success
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
                         }
                     });
-
-                    handleFormSubmit('#form_action'); // Bind form submit logic
                 });
-                ajaxHandler.execute();
+            }
+
+            // Handler untuk tombol tambah
+            $('.add').on('click', function(e) {
+                e.preventDefault();
+                showModal($(this).attr('href'));
             });
 
-        </script>
-    @endpush
+            // Handler untuk tombol aksi di tabel
+            $('#menu-table').on('click', '.action', function(e) {
+                e.preventDefault();
+                showModal($(this).attr('href'));
+            });
+        });
+    </script>
+@endpush
 </x-master-layout>

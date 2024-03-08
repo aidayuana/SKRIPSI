@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard &mdash; Arfa</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
         integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
         crossorigin="anonymous" />
@@ -39,7 +39,7 @@
         @include('layouts.settings')
 
         <footer>
-            Copyright © 2022 &nbsp <a href="https://www.youtube.com/c/mulaidarinull" target="_blank" class="ml-1"> Mulai Dari Null </a> <span> . All rights Reserved</span>
+            Copyright © 2022 &nbsp <a href="https://www.youtube.com/c/mulaidarinull" target="_blank" class="ml-1"> </a> <span> . All rights Reserved</span>
         </footer>
         <div class="overlay action-toggle">
         </div>
@@ -102,6 +102,7 @@
         }
          // This function initializes form submission logic
          function handleFormSubmit(selector) {
+            const _this = this;
                 $(selector).on('submit', function(e) {
                     e.preventDefault();
                     const _form = this;
@@ -117,6 +118,7 @@
                             submitLoader().show(); // Ensure this is defined
                         },
                         success: function(res) {
+                            console.log(this);
                             $('#modal_action').modal('hide');
                             window.LaravelDataTables['menu-table'].ajax.reload();
                         },
