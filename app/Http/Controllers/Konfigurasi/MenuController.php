@@ -71,14 +71,11 @@ class MenuController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
 
-            return response()->json(['status' => 'error', 'message' => $th->getMessage()], 500);
+            return responseError($th);
         }
        
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Create data successfully',
-        ]);
+        return responseSuccess();
     }
 
     /**
@@ -116,10 +113,7 @@ class MenuController extends Controller
         }
         $menu->save();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Update data successfully',
-        ]);
+        return responseSuccess(true);
     }
 
 
