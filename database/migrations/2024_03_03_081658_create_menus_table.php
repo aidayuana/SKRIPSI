@@ -9,14 +9,16 @@ return new class extends Migration {
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('main_menu_id')->nullable();
             $table->string('name');
             $table->string('url');
             $table->string('category')->nullable();
             $table->string('icon')->nullable();
             $table->boolean('active')->default(1);
             $table->integer('orders')->default(0);
-            $table->unsignedBigInteger('main_menu_id')->nullable(); // Just add the column without the foreign key
             $table->timestamps();
+
+            $table->foreign('main_menu_id')->references('id')->on('menus')->onDelete('set null');
         });
     }
 

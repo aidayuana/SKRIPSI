@@ -1,26 +1,31 @@
 <?php
+
 namespace App\Traits;
 
 use App\Models\Konfigurasi\Menu;
-use App\Models\Permission;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 trait HasMenuPermission
 {
-    public function attachMenupermission(Menu $menu, array | null $permissions, array | null $roles)
+    public function attachMenupermission(Menu $menu, ?array $permissions, ?array $roles)
     {
-       /**
-         * @var Permission $permission
-         */
+        // Fallback to a default set of permissions if none are provided
+        $permissions = $permissions ?? ['create', 'read', 'update', 'delete'];
 
-        if (!is_array($permissions)) {
-            $permission = $permissions ?? ['create', 'read', 'update', 'delete'];
-        }
-        foreach ($permissions as $item){
-            $permission = Permission::create(['name' => $item. "{$menu->url}"]);
-            $permission->menus()->attach($menu);
-            if ($roles){
-                $permission->assignRole($roles);
-            }   
+        foreach ($permissions as $item) {
+            // Correctly append the menu's URL to the permission name
+            $permissionName = $item . '-' . $menu->url;
+
+            // Use findOrCreate to avoid creating duplicates
+            $permission = Permission::findOrCreate($permissionName, 'web'); // Assuming 'web' is your guard name
+
+            if ($roles) {
+                foreach ($roles as $roleName) {
+                    $role = Role::findByName($roleName, 'web');
+                    $role->givePermissionTo($permission);
+                }
+            }
         }
     }
 }

@@ -23,26 +23,48 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="menu-category">
-                <span class="text-uppercase">User Interface</span>
-            </li>
-            <li>
-                <a href="#" class="main-menu has-dropdown">
-                    <i class="ti-desktop"></i>
-                    <span>UI Elements</span>
-                </a>
-                <ul class="sub-menu ">
-                    <li><a href="element-ui.html" class="link"><span>Elements</span></a></li>
-                    <li><a href="element-accordion.html" class="link"><span>Accordion</span></a></li>
-                    <li><a href="element-tabs-collapse.html" class="link"><span>Tabs & Collapse</span></a></li>
-                    <li><a href="element-card.html" class="link"><span>Card</span></a></li>
-                    <li><a href="element-button.html" class="link"><span>Buttons</span></a></li>
-                    <li><a href="element-alert.html" class="link"><span>Alert</span></a></li>
-                    <li><a href="element-themify-icons.html" class="link"><span>Themify Icons</span></a></li>
-                    <li><a href="element-modal.html" class="link"><span>Modal</span></a></li>
-                </ul>
-            </li>
-            <li>
+            @foreach (menus() as $category => $menus)
+                @php
+                    $showCategory = true;
+                @endphp
+                @foreach ($menus as $mm)
+                    @can('read-'. $mm->url)
+                        @if ($showCategory)
+                            <li class="menu-category">
+                                <span class="text-uppercase">{{ $category }}</span>
+                            </li>
+                            @php
+                                $showCategory = false;
+                            @endphp
+                        @endif
+                        
+                        <li @class(['active open' => str_contains(request()->path(), $mm->url)])>
+                            @if (count($mm->subMenus))
+                                <a href="#" class="main-menu has-dropdown">
+                                    <i class="ti-{{ $mm->icon }}"></i>
+                                    <span>{{ $mm->name }}</span>
+                                </a>
+                                <ul @class(['sub-menu', 'expand' => str_contains(request()->path(), $mm->url)])>
+                                    @foreach ($mm->subMenus as $sm)
+                                        @can('read-'. $sm->url)
+                                            <li @class(['active' => str_contains(request()->path(), $sm->url)])><a href="{{ url($sm->url) }}" class="link"><span>{{ $sm->name }}</span></a></li>
+                                        @endcan
+                                    @endforeach
+                                </ul>
+                            @else
+                                <a href="{{ url($mm->url) }}" class="link">
+                                    <i class="ti-{{ $mm->icon }}"></i>
+                                    <span>{{ $mm->name }}</span>
+                                </a>
+                            @endif
+                        </li>
+
+                    @endcan  
+                @endforeach
+            @endforeach
+            
+            
+            {{-- <li>
                 <a href="#" class="main-menu has-dropdown">
                     <i class="ti-book"></i>
                     <span>Form</span>
@@ -116,7 +138,7 @@
                     <i class="ti-calendar"></i>
                     <span>Calendar</span>
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </div>
 </nav>  
