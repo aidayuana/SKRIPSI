@@ -7,55 +7,24 @@
             <x-form.input name="name" value="{{ $data->name }}" label="Name" />
         </div>
         <div class="col-md-6">
-            <div class="mb-3">
-                <label class="form-label">Url</label>
-                <input type="text" name="url" value="{{ $data->url }}" class="form-control">
-            </div>
+            <x-form.input name="url" value="{{ $data->url }}" label="Url" />
         </div>
         <div class="col-md-6">
-            <div class="mb-3">
-                <label class="form-label">Category</label>
-                <input type="text" name="category" value="{{ $data->category }}" class="form-control">
-            </div>
+            <x-form.input name="category" value="{{ $data->category }}" label="Category" />
         </div>
         <div class="col-md-6">
-            <div class="mb-3">
-                <label class="form-label">Icon</label>
-                <input type="text" name="icon" value="{{ $data->icon }}" class="form-control">
-            </div>
+            <x-form.input name="icon" value="{{ $data->icon }}" label="Icon" />
         </div>
         <div class="col-md-6">
-            <div class="mb-3">
-                <label class="form-label">Orders</label>
-                <input type="text" name="orders" value="{{ $data->orders }}" class="form-control">
-            </div>
+            <x-form.input name="orders" value="{{ $data->orders }}" label="Orders" />
         </div>
         <div class="col-md-6">
-            <div class="mb-3">
-                <x-form.radio label="Level menu" inline="true" name="level_menu" :options="['Main menu' => 'main_menu', 'Sub menu' => 'sub_menu']" />
-                {{-- <label class="form-label d-block mb-2">Level menu</label>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" {{ !$data->main_menu_id ? 'checked' : '' }} type="radio" name="level_menu"
-                        id="inlineRadio1" value="main_menu">
-                    <label class="form-check-label" for="inlineRadio1">Main menu</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" {{ $data->main_menu_id ? 'checked' : '' }} type="radio" name="level_menu"
-                        id="inlineRadio2" value="sub_menu">
-                    <label class="form-check-label" for="inlineRadio2">Sub menu</label>
-                </div> --}}
-            </div>
+            <x-form.radio label="Level menu" inline="true" value="{{ $data->main_menu_id ? 'sub_menu' : 'main_menu' }}" name="level_menu" :options="['Main menu' => 'main_menu', 'Sub menu' => 'sub_menu']" />
         </div>
         <div id="main_menu_wrapper" class="col-md-6 {{ !$data->main_menu_id ? 'd-none' : '' }}">
-            <div class="mb-3">
-                <label for="" class="form-label">Main menu</label>
-                <select class="form-select form-select-sm mb-3" name="main_menu" aria-label="Default select example">
-                    <option selected value="">Pilih main menu</option>
-                    @foreach ($mainMenus as $item)
-                        <option value="{{ $item->id }}" @selected($data->main_menu_id == $item->id)>{{ $item->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+            <x-form.select id="main_menu" name="main_menu" value="{{ $data->main_menu_id }}" label="Main menu" placeholder="Pilih main menu" 
+                :options="$mainMenus"
+                />
         </div>
         <div class="col-12">
             <div class="mb-3">
