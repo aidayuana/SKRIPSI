@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Facades\Cache;
+use Mavinoo\Batch\BatchFacade;
+use Illuminate\Support\Facades\Response;
 
 class MenuController extends Controller
 {
@@ -29,6 +32,32 @@ class MenuController extends Controller
         return $menuDataTable->render('pages.konfigurasi.menu');
     }
 
+
+    public function sort()
+    {
+        try {
+            $menus = $this->repository->getMenus();
+            $data = [];
+            $i = 0;
+            foreach ($menus as $mm) {
+                $i++;
+                $data[] = ['id' => $mm->id, 'orders' => $i];
+                foreach ($mm->subMenus as $sm) {
+                    $i++;
+                    $data[] = ['id' => $sm->id, 'orders' => $i];
+                }
+            }
+
+            Cache::forget('menus');
+
+            BatchFacade::update(new Menu(), $data, 'id');
+
+            return Response::json(['status' => 'success', 'message' => 'Menu sorted successfully'], 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['error' => 'An error occurred'], 500);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      */

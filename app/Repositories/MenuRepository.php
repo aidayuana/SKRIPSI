@@ -13,6 +13,15 @@ class MenuRepository
             return [$item->name => $item->id];
         });
     }
+
+    public function getMenus()
+    {
+        return Menu::active()->width(['subMenus' => function($query) {
+            $query->orderBy('orders');
+        }])->whereNull('main_menu_id')
+        ->orderBy('orders')
+        ->get();
+    }
 }
 
 ?>

@@ -36,7 +36,7 @@ class MenuSeeder extends Seeder
                 'category' => $konfigurasiMenu->category,
                 'main_menu_id' => $konfigurasiMenu->id
             ]);
-            $this->attachMenupermission($sm, ['read', 'create', 'update', 'delete'], ['adminsekolah']);
+            $this->attachMenupermission($sm, ['create', 'read', 'update', 'delete', 'sort'], ['adminsekolah']);
         }
 
         // Menambahkan menu 'Master Data' jika belum ada
