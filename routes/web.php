@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Konfigurasi\MenuController;
+use App\Http\Controllers\Konfigurasi\RoleController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,11 +29,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::group(['prefix' => 'konfigurasi', 'as' => 'konfigurasi.'], function () {
+    Route::prefix('konfigurasi')->as('konfigurasi.')->group(function () {
         Route::put('menu/sort', [MenuController::class, 'sort'])->name('menu.sort');
         Route::resource('menu', MenuController::class);
+
+        // Define routes for roles, ensuring edit route is properly named
+        Route::resource('roles', RoleController::class)->except(['edit']);
+        // Specifically define the edit route to ensure it matches expected route naming conventions
+        Route::get('roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
     });
-    
 });
 
 require __DIR__.'/auth.php';

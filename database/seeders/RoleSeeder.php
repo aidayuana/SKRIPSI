@@ -21,6 +21,9 @@ class RoleSeeder extends Seeder
         $updatePermission = Permission::create(['name' => 'update konfigurasi/menu']);
         $deletePermission = Permission::create(['name' => 'delete konfigurasi/menu']);
         $sortPermission = Permission::create(['name' => 'sort konfigurasi/menu']);
+        $createPermission = Permission::create(['name' => 'create konfigurasi/roles']);
+        $editPermission = Permission::create(['name' => 'edit konfigurasi/roles']);
+        $updatePermission = Permission::create(['name' => 'update konfigurasi/roles']);
 
         // Kemudian, buat roles
         $siswa = Role::create(['name' => 'siswa']);
@@ -34,12 +37,13 @@ class RoleSeeder extends Seeder
         $adminSekolah->givePermissionTo($editPermission);
         $adminSekolah->givePermissionTo($updatePermission);
         $adminSekolah->givePermissionTo($deletePermission);
+        $adminSekolah->givePermissionTo($sortPermission);
         $superAdmin->givePermissionTo($readPermission);
         $superAdmin->givePermissionTo($createPermission);
         $superAdmin->givePermissionTo($editPermission);
         $superAdmin->givePermissionTo($updatePermission);
         $superAdmin->givePermissionTo($deletePermission);
-        $adminSekolah->givePermissionTo($sortPermission);
+        $superAdmin->givePermissionTo($sortPermission);
 
         // Jika ingin memberikan permission yang sama ke semua role, gunakan looping
         foreach (Role::all() as $role) {
@@ -48,7 +52,7 @@ class RoleSeeder extends Seeder
             $role->givePermissionTo($editPermission);
             $role->givePermissionTo($updatePermission);
             $role->givePermissionTo($deletePermission);
-            $superAdmin->givePermissionTo($sortPermission);
+            $role->givePermissionTo($sortPermission);
         }
     }
 }

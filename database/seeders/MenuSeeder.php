@@ -25,7 +25,8 @@ class MenuSeeder extends Seeder
         // Menambahkan submenu 'Menu' dan 'Users' ke dalam 'Konfigurasi'
         $subMenus = [
             ['name' => 'Menu', 'url' => 'konfigurasi/menu'],
-            ['name' => 'Users', 'url' => 'konfigurasi/users']
+            ['name' => 'Users', 'url' => 'konfigurasi/users'],
+            ['name' => 'Role', 'url' => 'konfigurasi/roles']
         ];
 
         foreach ($subMenus as $subMenu) {

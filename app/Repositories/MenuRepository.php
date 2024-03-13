@@ -16,7 +16,7 @@ class MenuRepository
 
     public function getMenus()
     {
-        return Menu::active()->width(['subMenus' => function($query) {
+        return Menu::active()->with(['subMenus' => function($query) {
             $query->orderBy('orders');
         }])->whereNull('main_menu_id')
         ->orderBy('orders')
