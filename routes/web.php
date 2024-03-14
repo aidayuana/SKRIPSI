@@ -37,6 +37,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('roles', RoleController::class)->except(['edit']);
         // Specifically define the edit route to ensure it matches expected route naming conventions
         Route::get('roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+        
+        // Route for deleting a role
+        Route::delete('roles/{role}/destroy', [RoleController::class, 'destroy'])->name('roles.destroy');
     });
 });
 

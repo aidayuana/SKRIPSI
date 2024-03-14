@@ -14,81 +14,114 @@
                             @can('create konfigurasi/roles')
                                 <a class="mb-3 btn btn-primary add" href="{{ route('konfigurasi.roles.create') }}">Add</a>
                             @endcan
-                            
                         </div>
                     </div>
-                    {!! $dataTable->table(['id'=>'menu-table']) !!}
+                    {!! $dataTable->table(['id' => 'role-table']) !!}
                 </div>
             </div>
         </div>
     </div>
-     <!-- Modal Structure -->
-     <div class="modal fade" id="modalContainer" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    
+    <!-- Modal Structure for any dynamic content, not directly related to the deletion but provided for completeness -->
+    <div class="modal fade" id="modalContainer" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                
+                <!-- Modal content dynamically injected here -->
             </div>
         </div>
     </div>
+
     @push('js')
-    {!! $dataTable->scripts() !!}
+        {!! $dataTable->scripts() !!}
 
-    <script>
-        const datatable = 'role-table';
-        $(document).ready(function() {
-            function showModal(url) {
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function(response) {
-                        $('#modalContainer .modal-content').html(response);
-                        $('#modalContainer').modal('show');
-                        initFormSubmitHandler();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                        alert('Terjadi kesalahan saat memuat form.');
-                    }
-                });
-            }
-
-            function initFormSubmitHandler() {
-                $('#form_action').submit(function(e) {
+        <script>
+            $(document).ready(function() {
+                // Event listener untuk tombol "Add"
+                $('.add').on('click', function(e) {
                     e.preventDefault();
-                    var formData = $(this).serialize();
-                    
+                    let actionUrl = $(this).attr('href'); // Ambil URL dari attribute href
+
+                    // Request ke server untuk mengambil modal content
                     $.ajax({
-                        url: $(this).attr('action'),
-                        type: 'POST',
-                        data: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Include CSRF token
-                        },
+                        url: actionUrl, // Gunakan URL dari attribute href
+                        method: 'GET',
                         success: function(response) {
-                            if(response.status === 'success') {
-                                $('#modalContainer').modal('hide');
-                            } else {
-                                alert('Terjadi kesalahan.');
-                            }
+                            // Isi modal dengan konten dari response
+                            $('#modalContainer .modal-content').html(response);
+                            // Tampilkan modal
+                            $('#modalContainer').modal('show');
                         },
-                        error: function(xhr, status, error) {
-                            console.error('Error:', error);
+                        error: function() {
+                            // Tampilkan pesan error jika terjadi masalah
+                            alert('Failed to load modal content. Please try again later.');
                         }
                     });
                 });
-            }
+                
+                // Event listener untuk tombol "Detail"
+                $('.detail').on('click', function(e) {
+                    e.preventDefault();
+                    let detailUrl = $(this).data('detail-url'); // Ambil URL detail dari data attribute
 
-            $('.add').on('click', function(e) {
-                e.preventDefault();
-                showModal($(this).attr('href'));
-            });
+                    // Request ke server untuk mengambil konten modal
+                    $.ajax({
+                        url: detailUrl,
+                        method: 'GET',
+                        success: function(response) {
+                            // Isi modal dengan konten dari response
+                            $('#modalContainer .modal-content').html(response);
+                            // Tampilkan modal
+                            $('#modalContainer').modal('show');
+                        },
+                        error: function() {
+                            // Tampilkan pesan error jika terjadi masalah
+                            alert('Failed to load modal content. Please try again later.');
+                        }
+                    });
+                });
+                
+                // Event listener untuk tombol "Delete" di dalam DataTables
+                $('#role-table').on('click', '.delete', function(e) {
+                    e.preventDefault();
+                    let deleteUrl = $(this).data('delete-url');
 
-            // Ensure the ID matches the DataTable ID
-            $('#' + datatable).on('click', '.action', function(e) {
-                e.preventDefault();
-                showModal($(this).attr('href'));
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: deleteUrl,
+                                type: 'POST',
+                                data: {
+                                    _method: 'DELETE',
+                                    _token: $('meta[name="csrf-token"]').attr('content')
+                                },
+                                success: function(response) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        response.message,
+                                        'success'
+                                    );
+                                    $('#role-table').DataTable().ajax.reload(null, false);
+                                },
+                                error: function(xhr) {
+                                    Swal.fire(
+                                        'Error',
+                                        'There was an issue deleting the role. Please try again.',
+                                        'error'
+                                    );
+                                }
+                            });
+                        }
+                    });
+                });
             });
-        });
-    </script>
+        </script>
     @endpush
 </x-master-layout>

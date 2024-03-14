@@ -11,6 +11,8 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use Illuminate\Support\Facades\Log;
+
 
 class RoleDataTable extends DataTable
 {
@@ -24,10 +26,16 @@ class RoleDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', function($row) {
                 $actions = [];
+                $actions['Detail'] = route('konfigurasi.roles.show', $row->id);
                 if (user()->can('update konfigurasi/roles')) {
                     $actions['Edit'] = route('konfigurasi.roles.edit', $row->id);
                 }
-                $actions['Detail'] = route('konfigurasi.roles.show', $row->id);
+                if (user()->can('delete konfigurasi/roles')) {
+                    $actions['Delete'] = route('konfigurasi.roles.destroy', $row->id);
+                }
+                
+                Log::debug('Actions for role ' . $row->id, $actions);
+                
                 return view('action', compact('actions'));
             })
             ->addIndexColumn();

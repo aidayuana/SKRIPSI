@@ -14,45 +14,64 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        // Pertama, buat permissions
-        $readPermission = Permission::create(['name' => 'read konfigurasi/menu']);
-        $createPermission = Permission::create(['name' => 'create konfigurasi/menu']);
-        $editPermission = Permission::create(['name' => 'edit konfigurasi/menu']);
-        $updatePermission = Permission::create(['name' => 'update konfigurasi/menu']);
-        $deletePermission = Permission::create(['name' => 'delete konfigurasi/menu']);
-        $sortPermission = Permission::create(['name' => 'sort konfigurasi/menu']);
-        $createPermission = Permission::create(['name' => 'create konfigurasi/roles']);
-        $editPermission = Permission::create(['name' => 'edit konfigurasi/roles']);
-        $updatePermission = Permission::create(['name' => 'update konfigurasi/roles']);
+        // Create permissions for 'menu'
+        $readMenuPermission = Permission::create(['name' => 'read konfigurasi/menu']);
+        $createMenuPermission = Permission::create(['name' => 'create konfigurasi/menu']);
+        $editMenuPermission = Permission::create(['name' => 'edit konfigurasi/menu']);
+        $updateMenuPermission = Permission::create(['name' => 'update konfigurasi/menu']);
+        $deleteMenuPermission = Permission::create(['name' => 'delete konfigurasi/menu']);
+        $sortMenuPermission = Permission::create(['name' => 'sort konfigurasi/menu']);
 
-        // Kemudian, buat roles
-        $siswa = Role::create(['name' => 'siswa']);
-        $guru = Role::create(['name' => 'guru']);
-        $adminSekolah = Role::create(['name' => 'adminsekolah']);
-        $superAdmin = Role::create(['name' => 'superadmin']);
+        // Create permissions for 'roles'
+        $readRolesPermission = Permission::create(['name' => 'read konfigurasi/roles']);
+        $createRolesPermission = Permission::create(['name' => 'create konfigurasi/roles']);
+        $editRolesPermission = Permission::create(['name' => 'edit konfigurasi/roles']);
+        $updateRolesPermission = Permission::create(['name' => 'update konfigurasi/roles']);
+        $deleteRolesPermission = Permission::create(['name' => 'delete konfigurasi/roles']);
+        $sortRolesPermission = Permission::create(['name' => 'sort konfigurasi/roles']);
 
-        // Lalu, berikan permission ke role tertentu
-        $adminSekolah->givePermissionTo($readPermission);
-        $adminSekolah->givePermissionTo($createPermission);
-        $adminSekolah->givePermissionTo($editPermission);
-        $adminSekolah->givePermissionTo($updatePermission);
-        $adminSekolah->givePermissionTo($deletePermission);
-        $adminSekolah->givePermissionTo($sortPermission);
-        $superAdmin->givePermissionTo($readPermission);
-        $superAdmin->givePermissionTo($createPermission);
-        $superAdmin->givePermissionTo($editPermission);
-        $superAdmin->givePermissionTo($updatePermission);
-        $superAdmin->givePermissionTo($deletePermission);
-        $superAdmin->givePermissionTo($sortPermission);
+        // Create roles
+        $siswaRole = Role::create(['name' => 'siswa']);
+        $guruRole = Role::create(['name' => 'guru']);
+        $adminSekolahRole = Role::create(['name' => 'adminsekolah']);
+        $superAdminRole = Role::create(['name' => 'superadmin']);
 
-        // Jika ingin memberikan permission yang sama ke semua role, gunakan looping
+        // Assign permissions to specific roles for 'menu'
+        $adminSekolahRole->givePermissionTo($readMenuPermission);
+        $adminSekolahRole->givePermissionTo($createMenuPermission);
+        $adminSekolahRole->givePermissionTo($editMenuPermission);
+        $adminSekolahRole->givePermissionTo($updateMenuPermission);
+        $adminSekolahRole->givePermissionTo($deleteMenuPermission);
+        $adminSekolahRole->givePermissionTo($sortMenuPermission);
+        $adminSekolahRole->givePermissionTo($readRolesPermission);
+        $adminSekolahRole->givePermissionTo($createRolesPermission);
+        $adminSekolahRole->givePermissionTo($editRolesPermission);
+        $adminSekolahRole->givePermissionTo($updateRolesPermission);
+        $adminSekolahRole->givePermissionTo($deleteRolesPermission);
+        $adminSekolahRole->givePermissionTo($sortRolesPermission);
+
+        // Assign permissions to specific roles for 'roles'
+        $superAdminRole->givePermissionTo($readRolesPermission);
+        $superAdminRole->givePermissionTo($createRolesPermission);
+        $superAdminRole->givePermissionTo($editRolesPermission);
+        $superAdminRole->givePermissionTo($updateRolesPermission);
+        $superAdminRole->givePermissionTo($deleteRolesPermission);
+        $superAdminRole->givePermissionTo($sortRolesPermission);
+        $superAdminRole->givePermissionTo($readMenuPermission);
+        $superAdminRole->givePermissionTo($createMenuPermission);
+        $superAdminRole->givePermissionTo($editMenuPermission);
+        $superAdminRole->givePermissionTo($updateMenuPermission);
+        $superAdminRole->givePermissionTo($deleteMenuPermission);
+        $superAdminRole->givePermissionTo($sortMenuPermission);
+
+        // If you want to give the same 'menu' permissions to all roles, use a loop
         foreach (Role::all() as $role) {
-            $role->givePermissionTo($readPermission);
-            $role->givePermissionTo($createPermission);
-            $role->givePermissionTo($editPermission);
-            $role->givePermissionTo($updatePermission);
-            $role->givePermissionTo($deletePermission);
-            $role->givePermissionTo($sortPermission);
+            $role->givePermissionTo($readMenuPermission);
+            $role->givePermissionTo($createMenuPermission);
+            $role->givePermissionTo($editMenuPermission);
+            $role->givePermissionTo($updateMenuPermission);
+            $role->givePermissionTo($deleteMenuPermission);
+            $role->givePermissionTo($sortMenuPermission);
         }
     }
 }

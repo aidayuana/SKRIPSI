@@ -11,7 +11,7 @@ class RoleRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize()
     {
         return true;
     }
@@ -21,11 +21,11 @@ class RoleRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(Request $request)
+    public function rules()
     {
         return [
-            'name' => ['required', Rule::unique('roles')->ignore($request->role)],
-            'guard_name' => 'required',
+            'name' => 'required|string|unique:roles,name,' . optional($this->role)->id,
+            'guard_name' => 'required|string',
         ];
     }
 }
